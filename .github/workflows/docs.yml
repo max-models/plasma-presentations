@@ -35,6 +35,8 @@ jobs:
         QUARTO_PATH=/tmp/quarto-1.6.40/bin/quarto uv run python docs/tools/examples.py
       smoke-paths: |
         getting-started/installation/index.html
+        getting-started/demo/index.html
+        example-scripts/first-talk/slides/talk.html
         examples/index.html
         examples/writing-slides/index.html
         examples/figures-in-slides/index.html

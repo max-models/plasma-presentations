@@ -53,17 +53,17 @@ def fake_quarto(monkeypatch):
 def test_new_talk_writes_the_talk_and_the_extension(tmp_path):
     qmd = new_talk(
         tmp_path / "kickoff",
-        "Spokes in 3D",
+        "Example talk",
         subtitle="Kickoff",
-        author="Max Lindqvist",
-        institute="IPP",
+        author="Jane Doe",
+        institute="Example Institute",
         date="2026-12-04",
     )
     assert qmd == tmp_path / "kickoff" / "talk.qmd"
     text = qmd.read_text()
-    assert text.startswith('---\ntitle: "Spokes in 3D"\nsubtitle: "Kickoff"\n')
-    assert 'author: "Max Lindqvist"' in text
-    assert 'institute: "IPP"' in text
+    assert text.startswith('---\ntitle: "Example talk"\nsubtitle: "Kickoff"\n')
+    assert 'author: "Jane Doe"' in text
+    assert 'institute: "Example Institute"' in text
     assert 'date: "2026-12-04"' in text
     assert "  plasma-revealjs: default\n  plasma-beamer: default\n---\n" in text
     assert "## Motivation" in text

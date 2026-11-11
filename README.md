@@ -36,7 +36,7 @@ shortcode) into the current folder.
 ## A first talk
 
 ``` bash
-plasma-presentations new kickoff --title "Spokes in 3D" --author "Max Lindqvist"
+plasma-presentations new kickoff --title "Example talk" --author "Jane Doe"
 plasma-presentations build kickoff/talk.qmd   # kickoff/talk.html and kickoff/talk.pdf
 ```
 

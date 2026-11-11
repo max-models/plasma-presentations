@@ -4,7 +4,7 @@ A talk is a ``.qmd`` file next to the ``plasma`` Quarto extension (``_extensions
 which gives two formats: ``plasma-revealjs`` (HTML slides) and ``plasma-beamer`` (a PDF with
 Beamer), and the ``plasma-figure`` shortcode for figures written by :func:`figure`.
 
->>> qmd = new_talk("kickoff", title="Spokes in 3D")  # doctest: +SKIP
+>>> qmd = new_talk("kickoff", title="Example talk")  # doctest: +SKIP
 >>> render(qmd)  # doctest: +SKIP
 [PosixPath('kickoff/talk.html'), PosixPath('kickoff/talk.pdf')]
 """
