@@ -5,26 +5,22 @@ format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
-### Fixed
-
-- `setup_project.sh` also renames the docs smoke paths (`api/app/...` in `docs.yml`), so the
-  docs build of a new project no longer looks for the template's API pages.
-
 ### Added
 
-- Opt-in scope-profiler regions, as in plasmacoll, wellbalanced and patchwork: `_profiling.py`
-  with the package's tag (`template_python`, renamed by `setup_project.sh`), registered on
-  import, and an example region on `main`. Off unless the application enables the tag (e.g.
-  `scope_profiler.setup(enable_tags=["template_python"])`). Adds the `scope-profiler>=0.7.5`
-  dependency.
-- `PyPI dependencies` workflow and `scripts/check_pypi_dependencies.py`: on every pull request to
-  `main`, fail if a dependency is a direct reference (`name @ git+https://...`), is not on PyPI, or
-  has a version range that no release satisfies, instead of failing the release after the merge.
-
-### Changed
-
-- `__version__` is read from the installed package metadata (`importlib.metadata`), not hardcoded,
-  so it can no longer disagree with `pyproject.toml` (a hardcoded one went stale in releases).
+- The `plasma` Quarto extension (`_extensions/plasma`, shipped in the package): the formats
+  `plasma-revealjs` (HTML slides with reveal.js: 16:9, slide numbers, MathJax, the plasma-plots
+  accent colour) and `plasma-beamer` (a PDF with Beamer and lualatex, 16:9, the same colours),
+  so one `.qmd` renders to both.
+- The `plasma-figure` shortcode: `{{< plasma-figure figures/growth caption="..." >}}` shows
+  `growth.json` as an interactive Plotly figure in HTML (inlined, drawn when its slide is first
+  shown) and `growth.pdf` (else `.png`) in Beamer and other formats.
+- `figure(result, "figures/growth")`: writes a plasma-plots result, a Plotly figure or a
+  Matplotlib figure as `.json`, `.pdf` and `.png` for the shortcode; Plotly images at slide size
+  with a 22 px font.
+- `new_talk`, `install_extension`, `render` and `find_quarto`, and the command
+  `plasma-presentations new | build | install`; rendering is the opt-in scope-profiler region
+  `plasma_presentations.render`.
+- Docs: installation, quickstart and the "First talk" example, rendered to HTML and PDF.
 
 ## [0.1.0] - 2026-10-05
 

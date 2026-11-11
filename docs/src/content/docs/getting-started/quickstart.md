@@ -1,44 +1,93 @@
 ---
 title: Quickstart
-description: Run the command line entry point of template-python.
+description: Start a talk, write slides in Quarto Markdown and render them to HTML and PDF.
 ---
 
-First, ensure that `template-python` is [installed](/template-python/getting-started/installation/).
+First, ensure that `plasma-presentations`, Quarto and a TeX distribution are
+[installed](/plasma-presentations/getting-started/installation/).
 
-## Basic usage
-
-After installation, you can run the application with:
+## Start a talk
 
 ```bash
-template-python
+plasma-presentations new kickoff --title "Spokes in 3D" --author "Max Lindqvist"
 ```
 
-which calls `app.main.main` and prints a greeting.
+writes `kickoff/talk.qmd`, a starter talk, and `kickoff/_extensions/plasma`, the Quarto
+extension with the max-models look. The talk's header picks both of its formats:
 
-## Use the package from Python
+```yaml
+---
+title: "Spokes in 3D"
+author: "Max Lindqvist"
+date: "today"
+format:
+  plasma-revealjs: default
+  plasma-beamer: default
+---
+```
+
+## Write slides
+
+The slides are plain [Quarto Markdown](https://quarto.org/docs/presentations/): `##` starts a
+slide, `#` a section, and lists, maths (`$...$`, `$$...$$`), columns (`:::: {.columns}`) and
+incremental lists (`::: {.incremental}`) work in both formats.
+
+## Render
+
+```bash
+plasma-presentations build kickoff/talk.qmd            # talk.html and talk.pdf
+plasma-presentations build kickoff/talk.qmd --to html  # only the reveal.js slides
+```
+
+`plasma-revealjs` writes HTML slides with reveal.js (16:9, slide numbers, MathJax) and
+`plasma-beamer` a PDF with Beamer and lualatex. `quarto preview kickoff/talk.qmd` reloads the
+slides in the browser while you write.
+
+## Figures
+
+`figure` writes a figure as `.json` (interactive, for HTML), `.pdf` (for Beamer) and `.png`. It
+takes a plasma-plots result, a Plotly figure or a Matplotlib figure (converted to Plotly by
+plasma-plots for the HTML slides):
 
 ```python
-from app.main import main
+from plasma_presentations import figure
 
-main()
+figure(result, "kickoff/figures/growth")
 ```
 
-See the [API reference](/template-python/api/app/) for every module and function.
+and the `plasma-figure` shortcode shows it in a slide:
+
+```markdown
+## Growth
+
+{{< plasma-figure figures/growth caption="The growth rate." width="80%" height="600px" >}}
+```
+
+The path is relative to the talk, without a suffix. `figure` needs the `figures` extra:
+`pip install "plasma-presentations[figures]"`.
+
+## More talks in one folder
+
+Quarto finds `_extensions/plasma` next to a talk or in any folder above it, so a folder of talks
+needs one copy. `plasma-presentations install talks/` copies it there, or updates it after an
+upgrade of the package.
+
+## From Python
+
+```python
+from plasma_presentations import new_talk, render
+
+qmd = new_talk("kickoff", "Spokes in 3D", author="Max Lindqvist")
+render(qmd)  # [kickoff/talk.html, kickoff/talk.pdf]
+```
+
+See the [examples](/plasma-presentations/examples/) and the
+[API reference](/plasma-presentations/api/plasma_presentations/).
 
 ## Profiling
 
-template-python's coarse operations are [scope-profiler](https://github.com/max-models/scope-profiler)
-regions (`template_python.main` here), tagged with the opt-in tag `template_python`: they are
-off by default and cost a fraction of a microsecond per call. A code that profiles itself with
-scope-profiler turns them on with the tag:
-
-```python
-import scope_profiler as sp
-
-sp.setup(enable_tags=["template_python"])
-```
-
-or without editing the code, with `SCOPE_PROFILER_ENABLE_TAGS=template_python`,
-`scope-profiler run --enable-tag template_python` or `enable_tags = ["template_python"]` in the
-TOML configuration. New regions use `@sp.profile("template_python.<name>", tags=PROFILE_TAGS)`
-with `PROFILE_TAGS` from the package's `_profiling` module.
+Rendering is a [scope-profiler](https://github.com/max-models/scope-profiler) region,
+`plasma_presentations.render`, with the opt-in tag `plasma_presentations`: off by default, and
+turned on with `sp.setup(enable_tags=["plasma_presentations"])`,
+`SCOPE_PROFILER_ENABLE_TAGS=plasma_presentations` or
+`scope-profiler run --enable-tag plasma_presentations`.

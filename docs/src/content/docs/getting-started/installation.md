@@ -1,36 +1,25 @@
 ---
 title: Installation
-description: Create a Python environment and install template-python.
+description: Install plasma-presentations, Quarto and a TeX distribution.
 ---
 
-Create and activate a Python environment:
+Install the package with pip:
 
 ```bash
-python -m venv env
-source env/bin/activate
-pip install --upgrade pip
+pip install plasma-presentations
+# with figures from plasma-plots:
+pip install "plasma-presentations[figures]"
 ```
 
-Install the package and its requirements with pip:
-
-```bash
-pip install -e .
-```
-
-Run the code with:
-
-```bash
-template-python
-```
+Rendering needs [Quarto](https://quarto.org/docs/get-started/) 1.4 or newer on the `PATH` (or
+its path in `QUARTO_PATH`). The PDF slides also need a TeX distribution with lualatex and Beamer:
+TeX Live, MacTeX or MiKTeX, or `quarto install tinytex`.
 
 ## Optional extras
 
-| Extra  | Installs                                                |
-| ------ | ------------------------------------------------------- |
-| `test` | `pytest` and `coverage`                                 |
-| `docs` | the notebook runner and griffe for the API reference    |
-| `dev`  | formatters and linters, plus the `test` and `docs` extras |
-
-```bash
-pip install -e ".[dev]"
-```
+| Extra     | Installs                                                  |
+| --------- | --------------------------------------------------------- |
+| `figures` | plasma-plots with Plotly and kaleido, for `figure`        |
+| `test`    | `pytest` and `coverage`                                   |
+| `docs`    | the notebook runner and griffe for the API reference      |
+| `dev`     | formatters and linters, plus the `test` and `docs` extras |
