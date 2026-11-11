@@ -109,6 +109,14 @@ def test_a_talk_below_the_extension_finds_it(tmp_path):
     assert not has_extension(tmp_path.parent / "elsewhere" / "talk.qmd")
 
 
+def test_an_extension_from_quarto_add_counts(tmp_path):
+    shutil.copytree(
+        install_extension(tmp_path / "package"),
+        tmp_path / "_extensions" / "max-models" / "plasma",
+    )
+    assert has_extension(tmp_path / "talk.qmd")
+
+
 def test_render_runs_quarto_once_per_format(tmp_path, fake_quarto):
     qmd = new_talk(tmp_path / "talk")
     assert render(qmd) == [qmd.with_suffix(".html"), qmd.with_suffix(".pdf")]

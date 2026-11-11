@@ -158,11 +158,14 @@ def has_extension(qmd: str | Path) -> bool:
         qmd: The talk's ``.qmd`` file.
 
     Returns:
-        True if ``_extensions/plasma`` is next to the talk or in a folder above it.
+        True if ``_extensions/plasma`` (from :func:`install_extension`) or
+        ``_extensions/<owner>/plasma`` (from ``quarto add``) is next to the talk or in a
+        folder above it.
     """
     folder = Path(qmd).resolve().parent
     return any(
         (parent / "_extensions" / EXTENSION / "_extension.yml").is_file()
+        or any((parent / "_extensions").glob(f"*/{EXTENSION}/_extension.yml"))
         for parent in (folder, *folder.parents)
     )
 

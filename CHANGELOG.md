@@ -9,7 +9,8 @@ format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - `quarto add max-models/plasma-presentations` installs the extension: a copy of it at the
   repository's root (`_extensions/plasma`), kept equal to the package's by `make extension` and a
-  test.
+  test. `render` also finds the extension where `quarto add` puts it
+  (`_extensions/max-models/plasma`).
 - The guides "Writing slides" and "Figures in slides" as notebooks; the quickstart links to them.
 
 - The `plasma` Quarto extension (`_extensions/plasma`, shipped in the package): the formats
