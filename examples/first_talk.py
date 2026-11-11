@@ -2,7 +2,7 @@
 
 A short talk started with `new_talk`, with an interactive plasma-plots figure, rendered to
 reveal.js slides (`first_talk/talk.html`) and to a Beamer PDF (`first_talk/talk.pdf`). The
-slides of the PDF are shown below the source.
+HTML slides are embedded below, and the slides of the PDF are shown below the source.
 """
 
 import shutil
@@ -22,8 +22,8 @@ shutil.rmtree(FOLDER, ignore_errors=True)
 qmd = new_talk(
     FOLDER,
     "Speeds in a thermal plasma",
-    author="Max Lindqvist",
-    institute="Max Planck Institute for Plasma Physics",
+    author="Jane Doe",
+    institute="Example Institute",
     date="2026-12-04",
 )
 
@@ -45,6 +45,7 @@ with qmd.open("a") as talk:
     )
 
 html, pdf = render(qmd)
+SLIDES = html  # the docs publish these HTML slides and embed them in this page
 
 # the slides of the PDF, as the docs show them
 subprocess.run(

@@ -9,7 +9,7 @@ First, ensure that `plasma-presentations`, Quarto and a TeX distribution are
 ## Start a talk
 
 ```bash
-plasma-presentations new kickoff --title "Spokes in 3D" --author "Max Lindqvist"
+plasma-presentations new kickoff --title "Example talk" --author "Jane Doe"
 ```
 
 writes `kickoff/talk.qmd`, a starter talk, and `kickoff/_extensions/plasma`, the Quarto
@@ -17,8 +17,8 @@ extension with the max-models look. The talk's header picks both of its formats:
 
 ```yaml
 ---
-title: "Spokes in 3D"
-author: "Max Lindqvist"
+title: "Example talk"
+author: "Jane Doe"
 date: "today"
 format:
   plasma-revealjs: default
@@ -69,7 +69,7 @@ quarto add max-models/plasma-presentations
 ```python
 from plasma_presentations import new_talk, render
 
-qmd = new_talk("kickoff", "Spokes in 3D", author="Max Lindqvist")
+qmd = new_talk("kickoff", "Example talk", author="Jane Doe")
 render(qmd)  # [kickoff/talk.html, kickoff/talk.pdf]
 ```
 
