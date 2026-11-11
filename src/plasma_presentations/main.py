@@ -13,8 +13,9 @@ def main(argv: list[str] | None = None) -> int:
 
     ``plasma-presentations new kickoff --title "..."`` starts a talk in the folder
     ``kickoff``, ``plasma-presentations build kickoff/talk.qmd`` renders it to HTML and PDF,
-    and ``plasma-presentations install .`` copies (or updates) the Quarto extension into a
-    folder of talks.
+    and ``plasma-presentations install talks`` copies (or updates) the Quarto extension into a
+    folder of talks and makes it a Quarto project, so that every talk below it finds the
+    extension.
 
     Args:
         argv: The arguments; the command line's when None.
@@ -39,7 +40,8 @@ def main(argv: list[str] | None = None) -> int:
     build.add_argument("qmd", help="the talk's .qmd file")
     build.add_argument("--to", default="all", choices=("all", *FORMATS))
     install = commands.add_parser(
-        "install", help="copy or update the Quarto extension in a folder of talks"
+        "install",
+        help="copy or update the Quarto extension in a folder of talks (a Quarto project)",
     )
     install.add_argument("folder", help="the folder; talks below it use the extension")
     args = parser.parse_args(argv)

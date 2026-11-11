@@ -5,6 +5,14 @@ format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Fixed
+
+- A folder of talks works: Quarto looks for an extension only up to the talk's project folder
+  (the nearest `_quarto.yml`), so `install_extension` / `plasma-presentations install` now also
+  write a `_quarto.yml` into the folder (unless it has one; `project=False` to skip), and
+  `has_extension` follows Quarto's rule. Before, a talk in a subfolder failed with "Unable to
+  read the extension 'plasma'".
+
 ### Added
 
 - `quarto add max-models/plasma-presentations` installs the extension: a copy of it at the

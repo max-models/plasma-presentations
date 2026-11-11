@@ -52,9 +52,12 @@ HTML, a PDF in Beamer. See [Figures in slides](/plasma-presentations/examples/fi
 
 ## More talks in one folder
 
-Quarto finds `_extensions/plasma` next to a talk or in any folder above it, so a folder of talks
-needs one copy. `plasma-presentations install talks/` copies it there, or updates it after an
-upgrade of the package. Without Python, Quarto installs the extension from GitHub:
+Quarto looks for `_extensions/plasma` from a talk's folder up to its Quarto project's folder
+(the nearest one with a `_quarto.yml`), and no further. `plasma-presentations install talks/`
+copies the extension there and writes a `_quarto.yml` that makes `talks/` a project, so one copy
+serves every talk below it; run it again to update the extension after an upgrade. Without
+Python, Quarto installs the extension from GitHub (then add the `_quarto.yml` yourself:
+`project: {type: default}`):
 
 ```bash
 cd talks

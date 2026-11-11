@@ -32,6 +32,9 @@ IMAGE_SIZE = (1280, 680)
 #: The font size of those images, and of the figures in HTML slides, unless the figure sets one.
 FONT_SIZE = 22
 
+#: The Quarto project file :func:`install_extension` writes into a folder of talks.
+PROJECT = "project:\n  type: default\n"
+
 #: The name of the Quarto extension, in ``_extensions/<name>``.
 EXTENSION = "plasma"
 
@@ -63,15 +66,28 @@ def _front_matter(
     return "\n".join(lines)
 
 
-def install_extension(folder: str | Path, overwrite: bool = True) -> Path:
+def _project_file(folder: Path) -> Path | None:
+    """The folder's Quarto project file, if it has one."""
+    for name in ("_quarto.yml", "_quarto.yaml"):
+        if (folder / name).is_file():
+            return folder / name
+    return None
+
+
+def install_extension(
+    folder: str | Path, overwrite: bool = True, project: bool = True
+) -> Path:
     """Copy the ``plasma`` Quarto extension into a folder of talks.
 
-    Quarto finds the extension in ``_extensions/plasma`` next to a talk or in a folder above
-    it, so one copy serves every talk below ``folder``.
+    Quarto looks for extensions from a talk's folder up to its project's folder (the nearest
+    one with a ``_quarto.yml``), and no further. So that one copy serves every talk below
+    ``folder``, it also writes a ``_quarto.yml`` there that makes the folder a Quarto project,
+    unless the folder has one already.
 
     Args:
         folder: The folder to copy it into, created if missing.
         overwrite: Replace an existing copy, e.g. to update it to this version of the package.
+        project: Write ``folder/_quarto.yml`` when it is missing.
 
     Returns:
         The extension's folder, ``folder/_extensions/plasma``.
@@ -79,12 +95,15 @@ def install_extension(folder: str | Path, overwrite: bool = True) -> Path:
     Raises:
         FileExistsError: If the extension is there and ``overwrite`` is False.
     """
-    target = Path(folder) / "_extensions" / EXTENSION
+    folder = Path(folder)
+    target = folder / "_extensions" / EXTENSION
     if target.exists():
         if not overwrite:
             raise FileExistsError(f"{target} exists; pass overwrite=True to replace it")
         shutil.rmtree(target)
     shutil.copytree(_data(f"_extensions/{EXTENSION}"), target)
+    if project and _project_file(folder) is None:
+        (folder / "_quarto.yml").write_text(PROJECT)
     return target
 
 
@@ -119,7 +138,7 @@ def new_talk(
     if folder.exists() and any(folder.iterdir()):
         raise FileExistsError(f"{folder} is not empty")
     folder.mkdir(parents=True, exist_ok=True)
-    install_extension(folder)
+    install_extension(folder, project=False)  # next to the talk, no project needed
     body = _data("templates/talk.qmd").read_text()
     qmd = folder / name
     qmd.write_text(_front_matter(title, subtitle, author, institute, date) + body)
@@ -154,19 +173,28 @@ def find_quarto() -> str:
 def has_extension(qmd: str | Path) -> bool:
     """Whether Quarto finds the ``plasma`` extension for a talk.
 
+    Quarto looks in the talk's folder and, inside a Quarto project, in every folder up to the
+    project's (the nearest one with a ``_quarto.yml``).
+
     Args:
         qmd: The talk's ``.qmd`` file.
 
     Returns:
         True if ``_extensions/plasma`` (from :func:`install_extension`) or
-        ``_extensions/<owner>/plasma`` (from ``quarto add``) is next to the talk or in a
-        folder above it.
+        ``_extensions/<owner>/plasma`` (from ``quarto add``) is in one of those folders.
     """
     folder = Path(qmd).resolve().parent
+    searched = []
+    for parent in (folder, *folder.parents):
+        searched.append(parent)
+        if _project_file(parent) is not None:
+            break
+    else:  # not in a project: only the talk's own folder
+        searched = [folder]
     return any(
         (parent / "_extensions" / EXTENSION / "_extension.yml").is_file()
         or any((parent / "_extensions").glob(f"*/{EXTENSION}/_extension.yml"))
-        for parent in (folder, *folder.parents)
+        for parent in searched
     )
 
 
@@ -193,7 +221,7 @@ def render(qmd: str | Path, to: str = "all") -> list[Path]:
         raise FileNotFoundError(f"{qmd} does not exist")
     if not has_extension(qmd):
         raise FileNotFoundError(
-            f"no _extensions/{EXTENSION} next to {qmd.name} or above it: run "
+            f"Quarto finds no _extensions/{EXTENSION} for {qmd.name}: run "
             f"`plasma-presentations install {qmd.parent}`"
         )
     quarto = find_quarto()

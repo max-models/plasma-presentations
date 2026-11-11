@@ -104,14 +104,35 @@ def test_install_extension_updates_or_refuses(tmp_path):
 
 def test_a_talk_below_the_extension_finds_it(tmp_path):
     install_extension(tmp_path)
+    assert (tmp_path / "_quarto.yml").read_text() == "project:\n  type: default\n"
     (tmp_path / "talks" / "a").mkdir(parents=True)
     assert has_extension(tmp_path / "talks" / "a" / "talk.qmd")
     assert not has_extension(tmp_path.parent / "elsewhere" / "talk.qmd")
 
 
+def test_quarto_does_not_look_above_the_project(tmp_path):
+    install_extension(tmp_path, project=False)
+    (tmp_path / "talks").mkdir()
+    assert not has_extension(tmp_path / "talks" / "talk.qmd")  # no project at all
+    (tmp_path / "talks" / "_quarto.yaml").write_text("project:\n  type: default\n")
+    assert not has_extension(tmp_path / "talks" / "talk.qmd")  # the project is below it
+    assert has_extension(tmp_path / "talk.qmd")  # its own folder
+
+
+def test_install_extension_keeps_a_project_file(tmp_path):
+    (tmp_path / "_quarto.yml").write_text("project:\n  type: website\n")
+    install_extension(tmp_path)
+    assert "website" in (tmp_path / "_quarto.yml").read_text()
+
+
+def test_a_new_talk_is_no_project(tmp_path):
+    qmd = new_talk(tmp_path / "talk")
+    assert not (qmd.parent / "_quarto.yml").exists()
+
+
 def test_an_extension_from_quarto_add_counts(tmp_path):
     shutil.copytree(
-        install_extension(tmp_path / "package"),
+        install_extension(tmp_path / "package", project=False),
         tmp_path / "_extensions" / "max-models" / "plasma",
     )
     assert has_extension(tmp_path / "talk.qmd")
@@ -319,3 +340,12 @@ def test_render_pdf_with_quarto(tmp_path):
     assert pdf.read_bytes().startswith(b"%PDF")
     tex = qmd.with_suffix(".tex")
     assert not tex.exists() or "line.pdf" in tex.read_text()
+
+
+@pytest.mark.skipif(QUARTO is None, reason="needs Quarto")
+def test_render_a_talk_in_a_folder_of_talks(tmp_path):
+    install_extension(tmp_path / "talks")
+    qmd = new_talk(tmp_path / "talks" / "kickoff" / "build", "A talk")
+    shutil.rmtree(qmd.parent / "_extensions")  # only the folder's copy is left
+    (html,) = render(qmd, "html")
+    assert html.is_file()
