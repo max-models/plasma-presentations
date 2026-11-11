@@ -1,0 +1,51 @@
+## Motivation
+
+- One source, two outputs: `plasma-revealjs` (HTML) and `plasma-beamer` (PDF)
+- Text, lists and maths are plain Quarto Markdown
+- Figures from plasma-plots: interactive in HTML, a PDF in Beamer
+
+## An equation
+
+The speeds of particles of mass $m$ in a plasma at temperature $T$:
+
+$$
+f(v) \propto v^2 \exp\left(-\frac{m v^2}{2 k_B T}\right)
+$$
+
+# Results
+
+## Two columns
+
+:::: {.columns}
+
+::: {.column width="50%"}
+- Text on the left
+- A figure on the right
+:::
+
+::: {.column width="50%"}
+- Columns of any width
+- Also in Beamer
+:::
+
+::::
+
+## Figures
+
+Save a figure with `plasma_presentations.figure(result, "figures/growth")` and show it with
+
+```markdown
+{{{< plasma-figure figures/growth caption="Growth rate" >}}}
+```
+
+## Step by step
+
+::: {.incremental}
+- First point
+- Second point
+- Third point
+:::
+
+## Summary
+
+- `plasma-presentations build talk.qmd` writes `talk.html` and `talk.pdf`

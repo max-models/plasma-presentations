@@ -1,0 +1,27 @@
+title: Plasma
+author: Max Lindqvist
+version: 0.1.0
+quarto-required: ">=1.4.0"
+contributes:
+  shortcodes:
+    - plasma-figure.lua
+  formats:
+    revealjs:
+      theme: [default, plasma.scss]
+      width: 1600
+      height: 900
+      margin: 0.06
+      slide-number: c/t
+      center: false
+      transition: none
+      html-math-method: mathjax
+      code-line-numbers: false
+      embed-resources: false
+      include-after-body: plasma-revealjs.html
+    beamer:
+      aspectratio: 169
+      classoption: [t]
+      pdf-engine: lualatex
+      fontsize: 11pt
+      section-titles: false
+      include-in-header: plasma-beamer.tex

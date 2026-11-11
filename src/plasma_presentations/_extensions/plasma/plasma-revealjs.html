@@ -1,0 +1,26 @@
+<script>
+// Draw each plasma-figure when its slide is first shown: a hidden slide has no size, and
+// Plotly would draw into a zero-sized box.
+(function () {
+  function draw(slide) {
+    if (!slide || typeof Plotly === "undefined") return;
+    slide.querySelectorAll(".plasma-figure-plot").forEach(function (div) {
+      if (div.dataset.drawn) {
+        Plotly.Plots.resize(div);
+        return;
+      }
+      var figure = JSON.parse(document.getElementById(div.dataset.source).textContent);
+      var layout = Object.assign({}, figure.layout || {}, { autosize: true });
+      delete layout.width;
+      delete layout.height;
+      // slides are 1600 px wide: Plotly's 12 px default is too small to read from the back
+      layout.font = Object.assign({ size: 22 }, layout.font || {});
+      Plotly.newPlot(div, figure.data || [], layout, { responsive: true, displaylogo: false });
+      div.dataset.drawn = "1";
+    });
+  }
+  if (typeof Reveal === "undefined") return;
+  Reveal.on("ready", function (event) { draw(event.currentSlide); });
+  Reveal.on("slidechanged", function (event) { draw(event.currentSlide); });
+})();
+</script>

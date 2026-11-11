@@ -1,5 +1,5 @@
 ---
-title: template-python
+title: plasma-presentations
 format:
   gfm:
     toc: false
@@ -8,111 +8,78 @@ format:
 
 <!-- README.md is generated from README.qmd: edit the .qmd and run `make readme`. -->
 
-[![Tests](https://github.com/max-models/template-python/actions/workflows/test_pytest.yml/badge.svg)](https://github.com/max-models/template-python/actions/workflows/test_pytest.yml)
-[![Static analysis](https://github.com/max-models/template-python/actions/workflows/static_analysis.yml/badge.svg)](https://github.com/max-models/template-python/actions/workflows/static_analysis.yml)
-[![Docs](https://github.com/max-models/template-python/actions/workflows/docs.yml/badge.svg)](https://max-models.github.io/template-python/)
-[![codecov](https://codecov.io/gh/max-models/template-python/branch/main/graph/badge.svg)](https://codecov.io/gh/max-models/template-python)
-[![PyPI](https://img.shields.io/pypi/v/template-python)](https://pypi.org/project/template-python/)
-[![Python](https://img.shields.io/pypi/pyversions/template-python)](https://pypi.org/project/template-python/)
+[![Tests](https://github.com/max-models/plasma-presentations/actions/workflows/test_pytest.yml/badge.svg)](https://github.com/max-models/plasma-presentations/actions/workflows/test_pytest.yml)
+[![Static analysis](https://github.com/max-models/plasma-presentations/actions/workflows/static_analysis.yml/badge.svg)](https://github.com/max-models/plasma-presentations/actions/workflows/static_analysis.yml)
+[![Docs](https://github.com/max-models/plasma-presentations/actions/workflows/docs.yml/badge.svg)](https://max-models.github.io/plasma-presentations/)
+[![codecov](https://codecov.io/gh/max-models/plasma-presentations/branch/main/graph/badge.svg)](https://codecov.io/gh/max-models/plasma-presentations)
+[![PyPI](https://img.shields.io/pypi/v/plasma-presentations)](https://pypi.org/project/plasma-presentations/)
+[![Python](https://img.shields.io/pypi/pyversions/plasma-presentations)](https://pypi.org/project/plasma-presentations/)
 
-Template repository for Python projects: a `src/` package with a console entry point,
-`pytest` tests, GitHub Actions for tests, static analysis, example notebooks, documentation and
-PyPI publishing, and an [Astro](https://astro.build/) + [Starlight](https://starlight.astro.build/)
-documentation site.
+Talks written as [Quarto](https://quarto.org/docs/presentations/) slides with the max-models
+look. One `.qmd` renders to HTML slides with reveal.js (`plasma-revealjs`, with interactive
+plasma-plots figures) and to a PDF with Beamer (`plasma-beamer`).
 
-Documentation: <https://max-models.github.io/template-python/>
-
-## Use the template
-
-Create a repository from this template, then rename the package:
-
-```bash
-bash setup_project.sh my-app
-rm setup_project.sh
-```
-
-This replaces `template-python` with `my-app` everywhere, moves `src/app` to `src/my_app`,
-and points the entry point, tests and docs at it.
+Documentation: <https://max-models.github.io/plasma-presentations/>
 
 ## Install
+
+``` bash
+pip install plasma-presentations
+pip install "plasma-presentations[figures]"  # figures from plasma-plots
+```
+
+Rendering needs [Quarto](https://quarto.org/docs/get-started/) 1.4 or newer, and the PDF a TeX
+distribution with lualatex and Beamer (TeX Live, MacTeX, MiKTeX or `quarto install tinytex`).
+
+## A first talk
+
+``` bash
+plasma-presentations new kickoff --title "Spokes in 3D" --author "Max Lindqvist"
+plasma-presentations build kickoff/talk.qmd   # kickoff/talk.html and kickoff/talk.pdf
+```
+
+`new` writes a starter `talk.qmd` and the Quarto extension (`_extensions/plasma`). The slides
+are plain Quarto Markdown; a figure written with
+
+``` python
+from plasma_presentations import figure
+
+figure(result, "kickoff/figures/growth")  # growth.json, growth.pdf, growth.png
+```
+
+is shown, interactive in HTML and as a PDF in Beamer, with
+
+``` markdown
+{{{< plasma-figure figures/growth caption="The growth rate." >}}}
+```
+
+## Development
 
 With [uv](https://docs.astral.sh/uv/):
 
 ```bash
 make install    # uv sync --extra dev, plus the pre-commit hooks
-uv run template-python
+make lint       # ruff check, ruff format --check, ssort, pyright
+make test       # pytest with coverage
 ```
-
-Or create and activate a Python environment (3.10 or newer):
-
-```bash
-python -m venv env
-source env/bin/activate
-pip install --upgrade pip
-```
-
-Install the code and requirements with pip:
-
-```bash
-pip install -e .
-```
-
-Run the code with:
-
-```bash
-template-python
-```
-
-The `test`, `docs` and `dev` extras install the test runner, the documentation tooling and
-the linters:
-
-```bash
-pip install -e ".[dev]"
-```
-
-## Development
-
-Formatting and linting use [ruff](https://docs.astral.sh/ruff/), type checking
-[pyright](https://microsoft.github.io/pyright/), run by [pre-commit](https://pre-commit.com/)
-and in CI:
-
-```bash
-make lint     # ruff check, ruff format --check, pyright
-make test     # pytest with coverage
-```
-
-Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/); see
-[CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Build docs
 
-The documentation in `docs/` is an Astro + Starlight site: hand-written pages, the notebooks
-in `tutorials/` executed and published as pages, complete Python scripts in `examples/`
-published with their plots, and the API reference generated from the
-docstrings with [starlight-pydocs](https://ewels.github.io/starlight-pydocs/). It needs
-Node 22 or newer.
+The documentation in `docs/` is an Astro + Starlight site with the shared
+[starlight-theme](https://github.com/max-models/starlight-theme): hand-written pages, the
+notebooks in `tutorials/` executed and published as pages, the scripts in `examples/` with
+their figures, and the API reference generated from the docstrings. It needs Node 22 or newer.
 
 ```bash
 make docs-install     # npm packages and the Python docs extra
 make docs-notebooks   # execute tutorials/*.ipynb and convert them to pages
-make docs-examples    # run examples/*.py and publish their plots
-make docs-dev         # live preview at http://localhost:4321/template-python/
+make docs-dev         # live preview at http://localhost:4321/plasma-presentations/
 make docs-build       # the static site in docs/dist
-```
-
-## Build the README
-
-`README.md` is rendered from `README.qmd` with [Quarto](https://quarto.org/):
-
-```bash
-make readme
 ```
 
 ## Releases
 
-Before merging a release to `main`, update the version in `pyproject.toml`,
-`src/app/__init__.py` and `CITATION.cff` (including its release date), and add the release
+Before merging a release to `main`, update the version in `pyproject.toml` and add the release
 notes to `CHANGELOG.md`. The push to `main` creates a GitHub release with a `vX.Y.Z` tag and
-publishes the package to PyPI with trusted publishing (OIDC). The one-time PyPI and GitHub
-configuration is described in the
-[publishing tutorial](https://max-models.github.io/template-python/development/publishing/).
+publishes the package to PyPI with trusted publishing; the one-time setup is described in the
+[publishing guide](https://max-models.github.io/plasma-presentations/development/publishing/).

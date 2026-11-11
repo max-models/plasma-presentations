@@ -24,14 +24,21 @@ jobs:
   docs:
     uses: max-models/starlight-theme/.github/workflows/docs.yml@v0
     with:
-      pre-build: uv run python docs/tools/examples.py
+      # the example scripts render their talks with Quarto (downloaded here) and lualatex, and
+      # show the PDF's slides as PNGs (poppler)
+      apt-packages: >-
+        texlive-luatex texlive-latex-recommended texlive-latex-extra lmodern poppler-utils
+      pre-build: >-
+        curl -sSL -o /tmp/quarto.tar.gz
+        https://github.com/quarto-dev/quarto-cli/releases/download/v1.6.40/quarto-1.6.40-linux-amd64.tar.gz &&
+        tar -xzf /tmp/quarto.tar.gz -C /tmp &&
+        QUARTO_PATH=/tmp/quarto-1.6.40/bin/quarto uv run python docs/tools/examples.py
       smoke-paths: |
         getting-started/installation/index.html
         examples/index.html
-        examples/example-tutorial/index.html
         example-scripts/index.html
-        example-scripts/sine-wave/index.html
-        api/app/index.html
-        api/app/main/index.html
-        examples/example-tutorial/example_tutorial.ipynb
-        example-scripts/sine-wave/plot-1.png
+        example-scripts/first-talk/index.html
+        api/plasma_presentations/index.html
+        api/plasma_presentations/main/index.html
+        api/plasma_presentations/talk/index.html
+        example-scripts/first-talk/plot-1.png
