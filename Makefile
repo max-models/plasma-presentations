@@ -5,7 +5,7 @@ NOTEBOOKS = cd docs && $(DOCS_ENV) npx starlight-notebooks
 DOCS_ENV = DOCS_PYTHON=$(shell $(PYTHON) -c "import sys; print(sys.executable)")
 FORCE ?=
 
-.PHONY: help install test lint readme readme-check docs-install docs-notebooks docs-examples docs-dev docs-build docs-preview docs-clean
+.PHONY: extension help install test lint readme readme-check docs-install docs-notebooks docs-examples docs-dev docs-build docs-preview docs-clean
 
 help:  ## list the targets
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-16s %s\n", $$1, $$2}'
@@ -58,3 +58,7 @@ docs-clean:  ## remove generated pages, assets and build output
 	$(NOTEBOOKS) clean
 	rm -rf docs/src/content/docs/example-scripts docs/public/example-scripts
 	rm -rf docs/dist docs/.astro
+
+extension:  ## copy the Quarto extension to _extensions/ at the root, for `quarto add`
+	rm -rf _extensions
+	cp -R src/plasma_presentations/_extensions _extensions

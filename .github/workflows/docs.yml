@@ -36,6 +36,9 @@ jobs:
       smoke-paths: |
         getting-started/installation/index.html
         examples/index.html
+        examples/writing-slides/index.html
+        examples/figures-in-slides/index.html
+        examples/figures-in-slides/figures_in_slides.ipynb
         example-scripts/index.html
         example-scripts/first-talk/index.html
         api/plasma_presentations/index.html

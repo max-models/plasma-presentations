@@ -1,0 +1,68 @@
+/*-- scss:defaults --*/
+// The max-models look: the plasma-plots accent and the Okabe-Ito palette on white.
+$plasma-accent: #2a78d6;
+$plasma-ink: #1f2328;
+$plasma-muted: #5b6070;
+$plasma-rule: #d0d4dc;
+
+$body-bg: #ffffff;
+$body-color: $plasma-ink;
+$link-color: $plasma-accent;
+$presentation-heading-color: $plasma-ink;
+$presentation-heading-font-weight: 600;
+$presentation-font-size-root: 36px;
+$presentation-h2-font-size: 1.5em;
+$presentation-title-slide-text-align: left;
+$font-family-sans-serif: "Inter", "Helvetica Neue", Arial, sans-serif;
+$presentation-heading-font: $font-family-sans-serif;
+$code-block-bg: #f5f6f8;
+
+/*-- scss:rules --*/
+.reveal .slides section h2 {
+  border-bottom: 2px solid $plasma-accent;
+  padding-bottom: 0.15em;
+  margin-bottom: 0.6em;
+}
+
+#title-slide .title {
+  color: $plasma-accent;
+  font-size: 2.2em;
+  margin-top: 1.5em;
+}
+
+#title-slide .subtitle,
+#title-slide .quarto-title-author-name,
+#title-slide .quarto-title-affiliation,
+#title-slide .date {
+  color: $plasma-muted;
+}
+
+.reveal .slide-number {
+  color: $plasma-muted;
+  background: none;
+  font-size: 0.6em;
+}
+
+.reveal .footer {
+  color: $plasma-muted;
+}
+
+.reveal .plasma-figure {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.reveal .plasma-figure .plasma-figure-plot {
+  width: 100%;
+}
+
+.reveal .plasma-figure figcaption,
+.reveal .plasma-figure .plasma-figure-caption {
+  color: $plasma-muted;
+  font-size: 0.6em;
+  margin-top: 0.3em;
+}
+
+.reveal .slides section .callout {
+  border-left-color: $plasma-accent;
+}

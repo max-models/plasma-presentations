@@ -1,0 +1,23 @@
+% The max-models look for Beamer: the plasma-plots accent, plain frames, slide numbers.
+\usepackage{amssymb}
+\definecolor{plasmaaccent}{HTML}{2A78D6}
+\definecolor{plasmaink}{HTML}{1F2328}
+\definecolor{plasmamuted}{HTML}{5B6070}
+\setbeamertemplate{navigation symbols}{}
+\setbeamercolor{normal text}{fg=plasmaink}
+\setbeamercolor{structure}{fg=plasmaaccent}
+\setbeamercolor{frametitle}{fg=plasmaink,bg=}
+\setbeamercolor{title}{fg=plasmaaccent}
+\setbeamercolor{author}{fg=plasmamuted}
+\setbeamercolor{institute}{fg=plasmamuted}
+\setbeamercolor{date}{fg=plasmamuted}
+\setbeamerfont{frametitle}{series=\bfseries}
+\setbeamerfont{title}{size=\LARGE,series=\bfseries}
+\setbeamertemplate{itemize items}[circle]
+\setbeamertemplate{frametitle}{%
+  \vspace*{0.4em}\insertframetitle\par\vspace*{-0.2em}%
+  {\color{plasmaaccent}\rule{\textwidth}{1pt}}}
+\setbeamertemplate{footline}{%
+  \hfill{\color{plasmamuted}\scriptsize\insertframenumber/\inserttotalframenumber}%
+  \hspace*{1em}\vspace*{0.8em}}
+\setbeamertemplate{caption}{\centering\color{plasmamuted}\footnotesize\insertcaption\par}
