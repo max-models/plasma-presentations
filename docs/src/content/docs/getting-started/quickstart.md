@@ -29,8 +29,8 @@ format:
 ## Write slides
 
 The slides are plain [Quarto Markdown](https://quarto.org/docs/presentations/): `##` starts a
-slide, `#` a section, and lists, maths (`$...$`, `$$...$$`), columns (`:::: {.columns}`) and
-incremental lists (`::: {.incremental}`) work in both formats.
+slide, `#` a section, and lists, maths, columns and incremental lists work in both formats.
+The guide [Writing slides](/plasma-presentations/examples/writing-slides/) goes through them.
 
 ## Render
 
@@ -45,32 +45,21 @@ slides in the browser while you write.
 
 ## Figures
 
-`figure` writes a figure as `.json` (interactive, for HTML), `.pdf` (for Beamer) and `.png`. It
-takes a plasma-plots result, a Plotly figure or a Matplotlib figure (converted to Plotly by
-plasma-plots for the HTML slides):
-
-```python
-from plasma_presentations import figure
-
-figure(result, "kickoff/figures/growth")
-```
-
-and the `plasma-figure` shortcode shows it in a slide:
-
-```markdown
-## Growth
-
-{{< plasma-figure figures/growth caption="The growth rate." width="80%" height="600px" >}}
-```
-
-The path is relative to the talk, without a suffix. `figure` needs the `figures` extra:
-`pip install "plasma-presentations[figures]"`.
+`figure(result, "kickoff/figures/growth")` writes a plasma-plots, Plotly or Matplotlib figure
+for a talk, and `{{< plasma-figure figures/growth caption="..." >}}` shows it: interactive in
+HTML, a PDF in Beamer. See [Figures in slides](/plasma-presentations/examples/figures-in-slides/);
+`figure` needs the `figures` extra: `pip install "plasma-presentations[figures]"`.
 
 ## More talks in one folder
 
 Quarto finds `_extensions/plasma` next to a talk or in any folder above it, so a folder of talks
 needs one copy. `plasma-presentations install talks/` copies it there, or updates it after an
-upgrade of the package.
+upgrade of the package. Without Python, Quarto installs the extension from GitHub:
+
+```bash
+cd talks
+quarto add max-models/plasma-presentations
+```
 
 ## From Python
 

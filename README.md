@@ -29,6 +29,10 @@ Rendering needs [Quarto](https://quarto.org/docs/get-started/) 1.4 or
 newer, and the PDF a TeX distribution with lualatex and Beamer (TeX
 Live, MacTeX, MiKTeX or `quarto install tinytex`).
 
+Without Python, `quarto add max-models/plasma-presentations` installs
+only the Quarto extension (the formats and the `plasma-figure`
+shortcode) into the current folder.
+
 ## A first talk
 
 ``` bash

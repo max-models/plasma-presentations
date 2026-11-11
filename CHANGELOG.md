@@ -7,6 +7,11 @@ format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- `quarto add max-models/plasma-presentations` installs the extension: a copy of it at the
+  repository's root (`_extensions/plasma`), kept equal to the package's by `make extension` and a
+  test.
+- The guides "Writing slides" and "Figures in slides" as notebooks; the quickstart links to them.
+
 - The `plasma` Quarto extension (`_extensions/plasma`, shipped in the package): the formats
   `plasma-revealjs` (HTML slides with reveal.js: 16:9, slide numbers, MathJax, the plasma-plots
   accent colour) and `plasma-beamer` (a PDF with Beamer and lualatex, 16:9, the same colours),
